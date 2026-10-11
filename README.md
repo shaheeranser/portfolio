@@ -2,28 +2,39 @@
 
 Personal portfolio site for Muhammad Shaheer — a full-stack software engineer. Built with Next.js (App Router) and Tailwind CSS, it presents experience, selected projects, and skills.
 
-## Sections
+## Views
 
-- **Hero** — intro, availability, and a fastfetch-style system-info window
+The site is a single-window desktop app. One centered window sits between the top panel and the
+dock, and the dock switches which view renders inside it — the page itself never scrolls.
+
+- **Home** — a single fastfetch terminal: `</>` ASCII art, your name, live detail rows, and terminal-styled *view projects* / *get in touch* / *download résumé* buttons
 - **Experience** — roles
-- **Projects** — featured projects, plus shipped and open-source contribution lists
-- **Stack & systems** — skills, education, certifications
-- **Connect** — email, phone, LinkedIn, GitHub, resume
+- **Work** — sub-tabs: **Projects** (commercial and shipped systems) and **Open source** (a library, a dataset and merged/open pull requests)
+- **Competencies** — sub-tabs: **Stack** (skills as shields.io badges) and **Education** (study and certifications)
+- **Contact** — email, phone, LinkedIn, GitHub, résumé
 
 ## Stack
 
 - Next.js 16 (App Router, React 19, Turbopack)
 - TypeScript
 - Tailwind CSS v4
-- `next/font` (Inter, JetBrains Mono)
+- `next/font` (IBM Plex Sans, IBM Plex Mono)
 
 ## Design
 
-A riced-desktop theme built on the Catppuccin palettes (Mocha by default, Latte for the light
-theme). The layout uses a GNOME/macOS-style app metaphor — a top panel with clock, tray, theme
-toggle and scroll progress, a floating dock with scroll-spy, an app-grid of projects, and an
-optional spotlight launcher (press `⌘K` / `Ctrl+K` to jump between sections, open links, or
-copy contact details). Dark/light theme persists via `localStorage`.
+A quiet desktop theme built on the Catppuccin palettes (Mocha by default, Latte for the light
+theme), with a single flat accent and no gradients. A top panel (brand, clock, theme toggle,
+`⌘K` launcher) and a dock — a floating pill on desktop, a bottom tab bar on mobile — switch views
+inside one uniform, centered window whose body scrolls internally when a view runs long. Dark/light
+theme persists via `localStorage`.
+
+## Deployment
+
+Statically exported and published to GitHub Pages from the `portfolio` repository by
+`.github/workflows/deploy.yml` on every push to `main`. The workflow builds with
+`NEXT_PUBLIC_BASE_PATH=/portfolio`, which sets the Next.js `basePath` so the site resolves under
+`https://shaheeranser.github.io/portfolio/`. Without that env var (as in local dev) the site is
+served from the root. `metadataBase` points at the same Pages URL.
 
 ## Getting started
 
@@ -38,7 +49,14 @@ Open http://localhost:3000.
 
 ```bash
 npm run build
-npm start
+```
+
+The static export is written to `out/` (there is no `next start` — this project is
+server-less). To preview the Pages build locally:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/portfolio npm run build
+npx serve out
 ```
 
 ## Notes

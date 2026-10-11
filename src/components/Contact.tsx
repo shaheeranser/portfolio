@@ -1,52 +1,39 @@
 import { ArrowUpRight, Download, Github, Linkedin, Mail, Phone } from "@/components/icons";
-import { Reveal } from "@/components/Reveal";
 import { SectionHead } from "@/components/SectionHead";
 import { contactLinks, profile } from "@/lib/content";
 
 const endpointIcon: Record<string, typeof Mail> = {
-  email: Mail,
-  phone: Phone,
-  github: Github,
-  linkedin: Linkedin,
+  Email: Mail,
+  Phone: Phone,
+  GitHub: Github,
+  LinkedIn: Linkedin,
 };
 
 export function Contact() {
   return (
-    <section className="section container" id="connect">
-      <Reveal>
-        <SectionHead
-          index="04"
-          title="Connect"
-          kicker="connect"
-          note="Open to full-time roles, contracts and infrastructure audits."
-        />
-      </Reveal>
+    <section className="contact-view" id="connect">
+      <SectionHead title="Contact" note="Open to full-time roles, contracts and infrastructure work." />
 
-      <Reveal delay={90}>
-        <div className="card connect-cta window">
+        <div className="connect-cta">
           <div>
-            <h2>
-              Let&apos;s build something that <span className="grad">stays up.</span>
-            </h2>
+            <h2>Let&apos;s build something that stays up.</h2>
             <p className="sub">
-              I reply fast to email. If you have a half-broken service, a backlog of infra debt,
-              or an idea that needs an engineer from day zero — reach out.
+              I reply fast to email. If you have a half-broken service, a backlog of
+              infrastructure debt, or an idea that needs an engineer from day one, reach out.
             </p>
           </div>
-          <div className="hero-cta">
+          <div className="cta-row">
             <a className="btn accent" href={`mailto:${profile.email}`}>
               <Mail />
-              {profile.email}
+              Email me
             </a>
             <a className="btn" href={profile.resume} download>
               <Download />
-              resume
+              Résumé
             </a>
           </div>
         </div>
-      </Reveal>
 
-      <Reveal delay={150}>
         <div className="endpoints">
           {contactLinks.map((link) => {
             const Icon = endpointIcon[link.label] ?? ArrowUpRight;
@@ -66,12 +53,11 @@ export function Contact() {
                   <br />
                   <span className="endpoint-val">{link.value}</span>
                 </span>
-                <ArrowUpRight />
+                <ArrowUpRight className="icon arrow" />
               </a>
             );
           })}
         </div>
-      </Reveal>
     </section>
   );
 }

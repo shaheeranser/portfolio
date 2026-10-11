@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ComponentType, type SVGProps } from "react";
 import {
   ArrowUpRight,
+  Briefcase,
   Download,
   Github,
   Grid,
@@ -10,8 +11,10 @@ import {
   Linkedin,
   Mail,
   Sun,
+  Terminal,
 } from "@/components/icons";
 import { navSections, profile } from "@/lib/content";
+import type { ViewId } from "@/components/Desktop";
 
 type Item = {
   kind: string;
@@ -22,16 +25,25 @@ type Item = {
   run: () => void;
 };
 
-function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+const sectionIcon: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+  work: Grid,
+  competencies: Layers,
+  connect: Mail,
+};
+
+const sectionKeywords: Record<string, string> = {
+  work: "work projects portfolio shipped open source oss contributions",
+  competencies: "competencies stack skills tools education certifications",
+  connect: "contact email hire reach",
+};
 
 type LauncherProps = {
   onClose: () => void;
   onToggleTheme: () => void;
+  onNavigate: (view: ViewId) => void;
 };
 
-export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
+export function Launcher({ onClose, onToggleTheme, onNavigate }: LauncherProps) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
@@ -40,25 +52,35 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
     const nav: Item[] = [
       {
         kind: "nav",
-        label: "home",
-        meta: "~/",
+        label: "Home",
+        meta: "home",
         keywords: "home top start hero intro",
-        icon: Grid,
-        run: () => scrollToId("top"),
+        icon: Terminal,
+        run: () => onNavigate("home"),
       },
-      ...navSections.map((s) => ({
+      {
         kind: "nav",
-        label: `go to ${s.label}`,
-        meta: s.num,
-        keywords: `${s.label} ${s.num} section jump scroll`,
-        icon: s.id === "stack" ? Layers : Grid,
-        run: () => scrollToId(s.id),
-      })),
+        label: "Experience",
+        meta: "experience",
+        keywords: "experience jobs work history roles",
+        icon: Briefcase,
+        run: () => onNavigate("experience"),
+      },
+      ...navSections
+        .filter((s) => s.id !== "experience")
+        .map((s) => ({
+          kind: "nav",
+          label: s.label,
+          meta: s.label.toLowerCase(),
+          keywords: `${s.label} section jump open ${sectionKeywords[s.id] ?? ""}`,
+          icon: sectionIcon[s.id] ?? Mail,
+          run: () => onNavigate(s.id as ViewId),
+        })),
     ];
     const links: Item[] = [
       {
         kind: "link",
-        label: "open github profile",
+        label: "Open GitHub profile",
         meta: "↗",
         keywords: "github code repos git source",
         icon: Github,
@@ -66,7 +88,7 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
       },
       {
         kind: "link",
-        label: "open linkedin profile",
+        label: "Open LinkedIn profile",
         meta: "↗",
         keywords: "linkedin work experience connect",
         icon: Linkedin,
@@ -74,15 +96,15 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
       },
       {
         kind: "link",
-        label: "download resume",
-        meta: "pdf",
+        label: "Download résumé",
+        meta: "PDF",
         keywords: "resume cv curriculum vitae download",
         icon: Download,
         run: () => window.open(profile.resume, "_blank", "noreferrer"),
       },
       {
         kind: "action",
-        label: "send email",
+        label: "Send email",
         meta: profile.email,
         keywords: "mail contact hire email reach",
         icon: Mail,
@@ -92,7 +114,7 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
       },
       {
         kind: "action",
-        label: "toggle theme",
+        label: "Toggle theme",
         meta: "dark / light",
         keywords: "theme light dark mode toggle",
         icon: Sun,
@@ -100,7 +122,7 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
       },
     ];
     return [...nav, ...links];
-  }, [onToggleTheme]);
+  }, [onToggleTheme, onNavigate]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -153,7 +175,7 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
           </span>
           <input
             className="launcher-input"
-            placeholder="search apps &amp; actions…"
+            placeholder="Search apps and actions"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -170,7 +192,7 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
         <div className="launcher-list" ref={listRef}>
           {filtered.length === 0 ? (
             <div className="launcher-empty">
-              no match for “{query}” — try “projects”, “resume” or “github”.
+              Nothing matches “{query}”. Try “projects”, “résumé” or “github”.
             </div>
           ) : (
             filtered.map((item, i) => {
@@ -186,9 +208,9 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
                     onClose();
                   }}
                 >
-<span className="li-icon">
-                  <Icon />
-                </span>
+                  <span className="li-icon">
+                    <Icon />
+                  </span>
                   <span>{item.label}</span>
                   <span className="li-kind">{item.meta}</span>
                 </button>
@@ -199,9 +221,6 @@ export function Launcher({ onClose, onToggleTheme }: LauncherProps) {
 
         <div className="launcher-foot">
           <span>↑↓ navigate · ⏎ select · esc close</span>
-          <span className="mono" style={{ marginLeft: "auto" }}>
-            shaheer@dev:~$
-          </span>
         </div>
       </div>
     </div>

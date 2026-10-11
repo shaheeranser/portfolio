@@ -1,9 +1,10 @@
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const profile = {
   name: "Muhammad Shaheer",
   handle: "shaheeranser",
-  host: "shaheer@portfolio",
+  host: "shaheeranser@localhost",
   role: "Full-Stack Software Engineer",
-  focus: "Cloud & DevOps · Systems",
   location: "Lahore, Pakistan",
   timezone: "UTC+05:00",
   email: "shaheer.anser@gmail.com",
@@ -11,29 +12,28 @@ export const profile = {
   phoneHref: "+923285440010",
   github: "https://github.com/shaheeranser",
   linkedin: "https://linkedin.com/in/shaheeranser",
-  resume: "/resume.pdf",
-  avatar: "https://avatars.githubusercontent.com/u/126239320?v=4&s=320",
-  company: "Inspirit360",
+  resume: `${basePath}/resume.pdf`,
   availability: "Available for full-time & contract — remote",
-  tagline:
-    "I build production web apps and the infrastructure that keeps them running — from first commit to a deployed, observed system.",
 };
 
 export const navSections = [
-  { id: "experience", num: "01", label: "experience" },
-  { id: "projects", num: "02", label: "projects" },
-  { id: "stack", num: "03", label: "stack" },
-  { id: "connect", num: "04", label: "connect" },
+  { id: "experience", label: "Experience" },
+  { id: "work", label: "Work" },
+  { id: "competencies", label: "Competencies" },
+  { id: "connect", label: "Contact" },
 ] as const;
 
-export const fastfetch = [
-  { k: "os", v: "linux — self-hosted" },
-  { k: "uptime", v: "shipping since 2022" },
-  { k: "shell", v: "zsh · tmux" },
-  { k: "editor", v: "vscode · nvim" },
-  { k: "de", v: "this portfolio, riced" },
-  { k: "monitor", v: "ci → staging → prod" },
-  { k: "stack", v: "ts · py · go · docker · k8s" },
+export type TerminalInfoRow = {
+  k: string;
+  v: string;
+};
+
+export const terminalInfo: TerminalInfoRow[] = [
+  { k: "role", v: profile.role },
+  { k: "focus", v: "Cloud & DevOps, Systems" },
+  { k: "location", v: profile.location },
+  { k: "timezone", v: profile.timezone },
+  { k: "status", v: "Open to full-time & contract" },
 ];
 
 export type Role = {
@@ -71,176 +71,123 @@ export const roles: Role[] = [
   },
 ];
 
-export type Project = {
+export type WorkItem = {
   name: string;
-  kind: string;
-  wire: string;
-  stack: string[];
-  description: string;
-  href?: string;
-  featured?: boolean;
-};
-
-export const projects: Project[] = [
-  {
-    name: "watcher",
-    kind: "daemon",
-    wire: "log → local-llm",
-    stack: ["Go", "Docker", "Ollama"],
-    description:
-      "Self-hosted daemon that tails your logs and explains crashes with a small local LLM — no cloud calls, no pasting stack traces into a chatbot.",
-    href: "https://github.com/shaheeranser/watcher",
-    featured: true,
-  },
-  {
-    name: "Exam Proctoring Platform",
-    kind: "app",
-    wire: "moodle → lti1.3",
-    stack: ["React", "TypeScript", "Express", "MongoDB", "Docker", "MinIO"],
-    description:
-      "LTI 1.3 exam platform that runs inside Moodle, proctoring in-browser with TensorFlow.js and MediaPipe; violation snapshots land in self-hosted MinIO.",
-    href: "https://github.com/shaheeranser/exam-proctor",
-    featured: true,
-  },
-  {
-    name: "CI/CD & Kubernetes Pipeline",
-    kind: "pipeline",
-    wire: "commit → aks",
-    stack: ["GitHub Actions", "Docker", "Kubernetes", "Azure ACR/AKS"],
-    description:
-      "Three-service FastAPI stack shipped by one pipeline: Postgres-backed CI, images to ACR, AKS deploys, and ephemeral per-PR staging with smoke tests.",
-    href: "https://github.com/shaheeranser/github-actions-demo",
-    featured: true,
-  },
-  {
-    name: "relaybox",
-    kind: "network",
-    wire: "event → webhook",
-    stack: ["Python", "HMAC-SHA256", "Docker"],
-    description:
-      "Self-hosted outbound webhook delivery: fan-out, exponential-backoff retries, HMAC-SHA256 request signing, and a durable audit trail of every attempt.",
-    href: "https://github.com/shaheeranser/relaybox",
-    featured: true,
-  },
-  {
-    name: "jattmail",
-    kind: "network",
-    wire: "smtp → tls",
-    stack: ["Python", "SMTP", "TLS"],
-    description:
-      "SMTP server written from scratch — TLS session handling and a minimal test client, built to understand the protocol below the library.",
-    href: "https://github.com/shaheeranser/jattmail",
-    featured: true,
-  },
-  {
-    name: "reamify",
-    kind: "library",
-    wire: "pdf → xlsx",
-    stack: ["TypeScript", "Node.js", "Streaming"],
-    description:
-      "MIT library that turns PDF tables into XLSX workbooks with streaming writers, so memory stays bounded on large documents.",
-    href: "https://github.com/shaheeranser/reamify",
-    featured: true,
-  },
-];
-
-export const alsoShipped: Project[] = [
-  {
-    name: "Invoicing portal · Inspirit360",
-    kind: "product",
-    wire: "private",
-    stack: ["Next.js", "FastAPI", "PostgreSQL"],
-    description:
-      "Production invoicing portal for European SME back-office teams, built end to end as founding engineer.",
-  },
-  {
-    name: "personal-mail-server",
-    kind: "infra",
-    wire: "postfix → dovecot",
-    stack: ["Shell", "Docker", "Postfix", "Dovecot"],
-    description:
-      "Self-hosted mail stack for a personal domain — Docker-MailServer, Postfix and Dovecot.",
-    href: "https://github.com/shaheeranser/personal-mail-server",
-  },
-  {
-    name: "errex",
-    kind: "cli",
-    wire: "stderr → fix",
-    stack: ["Python", "LLM", "Terminal"],
-    description:
-      "Terminal UI that pipes error logs to an LLM and returns plain-language fixes without leaving the shell. Go rewrite in progress.",
-    href: "https://github.com/shaheeranser/errex",
-  },
-  {
-    name: "hijri-api",
-    kind: "data",
-    wire: "json → static",
-    stack: ["TypeScript", "JSON"],
-    description:
-      "Open, verified and auditable Hijri calendar data for Pakistan, served as static JSON.",
-    href: "https://github.com/shaheeranser/hijri-api",
-  },
-  {
-    name: "Lookvisa",
-    kind: "product",
-    wire: "private",
-    stack: ["React", "Express", "MongoDB"],
-    description:
-      "Commercial platform connecting investors with investment seekers; designed the core API architecture and data models.",
-  },
-];
-
-export type Contribution = {
-  status: string;
-  state: "merged" | "open" | "closed";
-  title: string;
-  repo: string;
+  tag: string;
+  tone: "merged" | "open" | "live" | "";
+  sub: string;
   href: string;
 };
 
-export const contributions: Contribution[] = [
+export const projects: WorkItem[] = [
   {
-    status: "merged",
-    state: "merged",
-    title: "Rotation-aware table-cell hit-testing for slides",
-    repo: "genspark-ai/genoffice · 7.6k★",
-    href: "https://github.com/genspark-ai/genoffice/pull/171",
+    name: "Lookvisa",
+    tag: "platform",
+    tone: "live",
+    sub: "lookvisa.com · commercial platform connecting investors with investment seekers",
+    href: "https://lookvisa.com",
   },
   {
-    status: "open pr",
-    state: "open",
-    title: "perf(tables): cut chart detection off quadratic paths",
-    repo: "firecrawl/pdf-inspector",
-    href: "https://github.com/firecrawl/pdf-inspector/pull/613",
+    name: "Invoicing portal",
+    tag: "product",
+    tone: "live",
+    sub: "invoice.inspirit360.eu · production invoicing portal for European SME back-offices",
+    href: "https://invoice.inspirit360.eu",
   },
   {
-    status: "open issue",
-    state: "open",
-    title: "High extraction time and memory usage in @firecrawl/pdf-inspector",
-    repo: "firecrawl/pdf-inspector · #585",
-    href: "https://github.com/firecrawl/pdf-inspector/issues/585",
+    name: "Exam Proctoring Platform",
+    tag: "app",
+    tone: "",
+    sub: "github.com/shaheeranser/exam-proctor · LTI 1.3 proctoring that runs inside Moodle",
+    href: "https://github.com/shaheeranser/exam-proctor",
   },
   {
-    status: "open pr",
-    state: "open",
-    title: "Add shaheeranser to Cloud Native Security Pakistan members",
-    repo: "Cloud-Native-Security-Pakistan",
-    href: "https://github.com/Cloud-Native-Security-Pakistan/becoming-a-member/pull/25",
+    name: "watcher",
+    tag: "daemon",
+    tone: "",
+    sub: "github.com/shaheeranser/watcher · tails logs and explains crashes with a local LLM",
+    href: "https://github.com/shaheeranser/watcher",
   },
 ];
 
-export const skills: Array<{ label: string; items: string[] }> = [
-  { label: "languages", items: ["TypeScript", "Python", "Go", "C++", "SQL", "Bash"] },
-  { label: "frontend", items: ["React", "Next.js", "Vite", "HTML5", "CSS3"] },
-  { label: "backend", items: ["FastAPI", "Node.js", "Express", "Flask"] },
-  { label: "data", items: ["PostgreSQL", "MongoDB", "MySQL", "MinIO"] },
+export const opensource: WorkItem[] = [
   {
-    label: "cloud & devops",
-    items: ["AWS", "Azure", "Docker", "Kubernetes", "GitHub Actions", "Linux", "Caddy", "Git"],
+    name: "reamify",
+    tag: "library",
+    tone: "",
+    sub: "shaheeranser/reamify · MIT · streams PDF tables into XLSX with bounded memory",
+    href: "https://github.com/shaheeranser/reamify",
   },
   {
-    label: "ml & observability",
-    items: ["TensorFlow", "TensorFlow.js", "MediaPipe", "NumPy", "pandas", "scikit-learn"],
+    name: "hijri-api",
+    tag: "data",
+    tone: "",
+    sub: "shaheeranser/hijri-api · verified, auditable Hijri calendar data as static JSON",
+    href: "https://github.com/shaheeranser/hijri-api",
+  },
+  {
+    name: "Rotation-aware table-cell hit-testing for slides",
+    tag: "merged",
+    tone: "merged",
+    sub: "genspark-ai/genoffice · 7.6k★ · pull request #171",
+    href: "https://github.com/genspark-ai/genoffice/pull/171",
+  },
+  {
+    name: "perf(tables): cut chart detection off quadratic paths",
+    tag: "open pr",
+    tone: "open",
+    sub: "firecrawl/pdf-inspector · pull request #613",
+    href: "https://github.com/firecrawl/pdf-inspector/pull/613",
+  },
+];
+
+export type Skill = {
+  label: string;
+  color: string;
+  logo: string;
+  logoColor?: string;
+};
+
+export const skills: Array<{ label: string; items: Skill[] }> = [
+  {
+    label: "Languages",
+    items: [
+      { label: "TypeScript", color: "3178C6", logo: "typescript", logoColor: "white" },
+      { label: "Python", color: "3776AB", logo: "python", logoColor: "white" },
+      { label: "Go", color: "00ADD8", logo: "go", logoColor: "white" },
+    ],
+  },
+  {
+    label: "Frontend",
+    items: [
+      { label: "React", color: "61DAFB", logo: "react", logoColor: "20232A" },
+      { label: "Next.js", color: "000000", logo: "nextdotjs", logoColor: "white" },
+    ],
+  },
+  {
+    label: "Backend",
+    items: [
+      { label: "Node.js", color: "339933", logo: "nodedotjs", logoColor: "white" },
+      { label: "Express", color: "000000", logo: "express", logoColor: "white" },
+      { label: "FastAPI", color: "009688", logo: "fastapi", logoColor: "white" },
+    ],
+  },
+  {
+    label: "Data",
+    items: [
+      { label: "PostgreSQL", color: "4169E1", logo: "postgresql", logoColor: "white" },
+      { label: "MongoDB", color: "47A248", logo: "mongodb", logoColor: "white" },
+    ],
+  },
+  {
+    label: "Cloud & DevOps",
+    items: [
+      { label: "AWS", color: "232F3E", logo: "amazonwebservices", logoColor: "white" },
+      { label: "Azure", color: "0078D4", logo: "microsoftazure", logoColor: "white" },
+      { label: "Docker", color: "2496ED", logo: "docker", logoColor: "white" },
+      { label: "Kubernetes", color: "326CE5", logo: "kubernetes", logoColor: "white" },
+      { label: "GitHub Actions", color: "2088FF", logo: "githubactions", logoColor: "white" },
+    ],
   },
 ];
 
@@ -271,11 +218,11 @@ export const certifications = [
 ];
 
 export const contactLinks = [
-  { label: "email", value: profile.email, href: `mailto:${profile.email}`, external: false },
-  { label: "phone", value: profile.phone, href: `tel:${profile.phoneHref}`, external: false },
-  { label: "github", value: "github.com/shaheeranser", href: profile.github, external: true },
+  { label: "Email", value: profile.email, href: `mailto:${profile.email}`, external: false },
+  { label: "Phone", value: profile.phone, href: `tel:${profile.phoneHref}`, external: false },
+  { label: "GitHub", value: "github.com/shaheeranser", href: profile.github, external: true },
   {
-    label: "linkedin",
+    label: "LinkedIn",
     value: "linkedin.com/in/shaheeranser",
     href: profile.linkedin,
     external: true,

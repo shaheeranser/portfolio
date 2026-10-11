@@ -19,15 +19,6 @@ export function Terminal(p: IconProps) {
   );
 }
 
-export function User(p: IconProps) {
-  return (
-    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
-      <circle cx="12" cy="8" r="3.6" />
-      <path d="M5 20a7 7 0 0 1 14 0" />
-    </svg>
-  );
-}
-
 export function Briefcase(p: IconProps) {
   return (
     <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
@@ -149,34 +140,6 @@ export function Menu(p: IconProps) {
   );
 }
 
-export function Check(p: IconProps) {
-  return (
-    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
-      <path d="m5 12.5 4.5 4.5L19 7" />
-    </svg>
-  );
-}
-
-export function Wifi(p: IconProps) {
-  return (
-    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
-      <path d="M4 9a12 12 0 0 1 16 0" />
-      <path d="M7 12.5a8 8 0 0 1 10 0" />
-      <path d="M10 16a4 4 0 0 1 4 0" />
-      <circle cx="12" cy="19" r="0.6" fill="currentColor" />
-    </svg>
-  );
-}
-
-export function Volume(p: IconProps) {
-  return (
-    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
-      <path d="M4 9h3l4-3v12l-4-3H4z" />
-      <path d="M15 9.5a4 4 0 0 1 0 5" />
-    </svg>
-  );
-}
-
 export function Github(p: IconProps) {
   return (
     <svg className="icon" viewBox="0 0 24 24" fill="currentColor" {...p}>
@@ -185,11 +148,34 @@ export function Github(p: IconProps) {
   );
 }
 
-export function Send(p: IconProps) {
+export function Package(p: IconProps) {
   return (
     <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
-      <path d="m21 3-9.5 9.5" />
-      <path d="M21 3 13.5 21l-2.7-7.2L3.5 11 21 3Z" />
+      <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
+      <path d="m4 7.5 8 4.5 8-4.5" />
+      <path d="M12 12v9" />
+    </svg>
+  );
+}
+
+export function Database(p: IconProps) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
+      <ellipse cx="12" cy="6" rx="7" ry="3" />
+      <path d="M5 6v12c0 1.66 3.13 3 7 3s7-1.34 7-3V6" />
+      <path d="M5 12c0 1.66 3.13 3 7 3s7-1.34 7-3" />
+    </svg>
+  );
+}
+
+export function GitPullRequest(p: IconProps) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" {...stroke} {...p}>
+      <circle cx="6" cy="6" r="2.5" />
+      <circle cx="6" cy="18" r="2.5" />
+      <circle cx="18" cy="6" r="2.5" />
+      <path d="M6 8.5v7" />
+      <path d="M18 8.5v2a3 3 0 0 1-3 3h-6" />
     </svg>
   );
 }

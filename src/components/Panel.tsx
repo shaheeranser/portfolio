@@ -7,6 +7,7 @@ import {
   Github,
   Grid,
   Layers,
+  Linkedin,
   Mail,
   Menu,
   Moon,
@@ -16,38 +17,27 @@ import {
   Terminal,
 } from "@/components/icons";
 import { navSections, profile } from "@/lib/content";
+import type { ViewId } from "@/components/Desktop";
 
 const sheetIcon: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   experience: Briefcase,
-  projects: Grid,
-  stack: Layers,
+  work: Grid,
+  competencies: Layers,
   connect: Mail,
 };
 
 type PanelProps = {
   theme: "dark" | "light";
+  view: ViewId;
   onToggleTheme: () => void;
+  onNavigate: (view: ViewId) => void;
   onOpenLauncher: () => void;
 };
 
-export function Panel({ theme, onToggleTheme, onOpenLauncher }: PanelProps) {
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
+export function Panel({ theme, view, onToggleTheme, onNavigate, onOpenLauncher }: PanelProps) {
   const [clock, setClock] = useState("--:--");
   const [date, setDate] = useState("----- -- ---");
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 8);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(1, y / max) : 0);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const tick = () => {
@@ -74,38 +64,25 @@ export function Panel({ theme, onToggleTheme, onOpenLauncher }: PanelProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
-
   return (
-    <header className={`panel ${scrolled ? "scrolled" : ""}`}>
+    <header className="panel">
       <div className="container panel-inner">
-        <a className="brand" href="#top" aria-label={`${profile.name} — home`}>
+        <button
+          className="brand"
+          type="button"
+          onClick={() => onNavigate("home")}
+          aria-label={`${profile.name} — home`}
+        >
           <span className="brand-mark" aria-hidden="true">
-            <Terminal />
+            {"</>"}
           </span>
-          <span className="brand-name">
-            shaheer<b>.</b>dev
-          </span>
-        </a>
-
-        <nav className="panel-menu" aria-label="Primary">
-          {navSections.map((s) => (
-            <a className="panel-link" href={`#${s.id}`} key={s.id}>
-              <span className="panel-idx">{s.num}</span>
-              {s.label}
-            </a>
-          ))}
-        </nav>
+          <span className="brand-name">Muhammad Shaheer</span>
+        </button>
 
         <div className="panel-side">
           <span className="tray-status wide-only">
             <span className="led ok live" aria-hidden="true" />
-            open to work
+            Open to work
           </span>
           <span className="panel-clock">
             <span className="dim">{date}</span> · {clock}
@@ -148,10 +125,6 @@ export function Panel({ theme, onToggleTheme, onOpenLauncher }: PanelProps) {
         </div>
       </div>
 
-      <div className="progress" aria-hidden="true">
-        <i style={{ transform: `scaleX(${progress})` }} />
-      </div>
-
       {menuOpen ? (
         <div
           className="sheet-overlay"
@@ -162,31 +135,44 @@ export function Panel({ theme, onToggleTheme, onOpenLauncher }: PanelProps) {
         >
           <div className="sheet" onClick={(e) => e.stopPropagation()}>
             <div className="sheet-grab" aria-hidden="true" />
-            <a className="sheet-row" href="#top" onClick={() => setMenuOpen(false)}>
-              <span className="sr-only">Home</span>
+            <button
+              className="sheet-row"
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                onNavigate("home");
+              }}
+            >
               <Terminal />
-              <span>home</span>
-              <span className="sub">~/</span>
-            </a>
+              <span>Home</span>
+            </button>
             {navSections.map((s) => {
               const Icon = sheetIcon[s.id] ?? Grid;
               return (
-                <a className="sheet-row" href={`#${s.id}`} key={s.id} onClick={() => setMenuOpen(false)}>
+                <button
+                  className="sheet-row"
+                  type="button"
+                  key={s.id}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onNavigate(s.id as ViewId);
+                  }}
+                >
                   <Icon />
                   <span>{s.label}</span>
-                  <span className="sub">{s.num}</span>
-                </a>
+                  {view === s.id ? <span className="sub">open</span> : null}
+                </button>
               );
             })}
             <div className="sheet-sep" aria-hidden="true" />
             <a className="sheet-row" href={`mailto:${profile.email}`}>
               <Mail />
-              <span>email</span>
+              <span>Email</span>
               <span className="sub">{profile.email}</span>
             </a>
             <a className="sheet-row" href={`tel:${profile.phoneHref}`}>
               <Phone />
-              <span>call</span>
+              <span>Call</span>
               <span className="sub">{profile.phone}</span>
             </a>
             <div className="sheet-sep" aria-hidden="true" />
@@ -199,18 +185,23 @@ export function Panel({ theme, onToggleTheme, onOpenLauncher }: PanelProps) {
               }}
             >
               <Sun />
-              <span>toggle theme</span>
+              <span>Toggle theme</span>
               <span className="sub">{theme}</span>
             </button>
             <a className="sheet-row" href={profile.github} target="_blank" rel="noreferrer">
               <Github />
-              <span>github</span>
+              <span>GitHub</span>
+              <span className="sub">↗</span>
+            </a>
+            <a className="sheet-row" href={profile.linkedin} target="_blank" rel="noreferrer">
+              <Linkedin />
+              <span>LinkedIn</span>
               <span className="sub">↗</span>
             </a>
             <a className="sheet-row" href={profile.resume} download>
               <Download />
-              <span>resume</span>
-              <span className="sub">pdf</span>
+              <span>Résumé</span>
+              <span className="sub">PDF</span>
             </a>
           </div>
         </div>
