@@ -1,11 +1,30 @@
-import Image from "next/image";
+import { Download } from "@/components/icons";
+import { WindowFrame } from "@/components/WindowFrame";
+import { fastfetch, profile } from "@/lib/content";
 
-const profile = {
-  avatar: "https://avatars.githubusercontent.com/u/126239320?v=4&s=320",
-  email: "shaheer.anser@gmail.com",
-  github: "https://github.com/shaheeranser",
-  linkedin: "https://linkedin.com/in/shaheeranser",
-};
+const ascii = [
+  "████████",
+  "████████",
+  "██",
+  "████████",
+  "████████",
+  "████████",
+  "      ██",
+  "████████",
+  "████████",
+];
+
+const asciiColor = [
+  "var(--pink)",
+  "var(--pink)",
+  "var(--mauve)",
+  "var(--mauve)",
+  "var(--blue)",
+  "var(--blue)",
+  "var(--sky)",
+  "var(--teal)",
+  "var(--teal)",
+];
 
 export function Hero() {
   return (
@@ -13,81 +32,77 @@ export function Hero() {
       <div className="hero-grid">
         <div className="hero-copy">
           <span className="hero-avail">
-            <span className="pulse-dot" aria-hidden="true" />
-            Available for work — remote
+            <span className="led ok live" aria-hidden="true" />
+            {profile.availability}
           </span>
+
           <h1>
-            <span className="line">Muhammad</span>
-            <span className="line">
-              <span className="hollow">Shaheer</span>
-              <span className="accent">.</span>
-            </span>
+            Muhammad <span className="grad">Shaheer</span>
           </h1>
-          <p className="hero-lede">
-            Full-stack software engineer. I build <strong>production web apps</strong> and
-            the <strong>infrastructure that keeps them running</strong> — from first
-            commit to a deployed, observed system. AI/ML only where it earns its place.
+
+          <p className="hero-role">
+            full-stack engineer <span className="sep">{"//"}</span> cloud, devops &amp; systems
           </p>
+
+          <p className="hero-lede">
+            I build <strong>production web apps</strong> and the{" "}
+            <strong>infrastructure that keeps them running</strong> — from first commit to a
+            deployed, observed system. AI/ML only where it earns its place.
+          </p>
+
           <div className="hero-cta">
             <a className="btn accent" href="#projects">
-              See the work <span aria-hidden="true">↘</span>
+              browse projects
             </a>
-            <a className="btn ghost" href="#contact">
-              Get in touch
+            <a className="btn" href="#connect">
+              let&apos;s talk
+            </a>
+            <a className="btn" href={profile.resume} download>
+              <Download />
+              resume
             </a>
           </div>
+
           <p className="hero-meta">
-            Lahore, Pakistan · Full-time &amp; contract ·{" "}
-            <a href={profile.github} target="_blank" rel="noreferrer">github ↗</a>{" "}
-            · <a href={profile.linkedin} target="_blank" rel="noreferrer">linkedin ↗</a>
+            <span>{profile.location}</span>
+            <span className="dim">·</span>
+            <span>full-time &amp; contract</span>
+            <span className="dim">·</span>
+            <span>{profile.timezone}</span>
           </p>
         </div>
 
-        <div className="hero-panel">
-          <span className="glow" aria-hidden="true" />
-          <div className="profile-card">
-            <div className="profile-head">
-              <span className="profile-avatar">
-                <Image
-                  src={profile.avatar}
-                  alt="Muhammad Shaheer portrait"
-                  width={96}
-                  height={96}
-                  unoptimized
-                  priority
-                />
-              </span>
-              <div className="profile-role">
-                <p className="who">@shaheeranser</p>
-                <p className="where">Founding engineer</p>
-                <p className="where">Inspirit360 · EU remote</p>
+        <WindowFrame title="shaheer@dev: ~" className="term">
+          <div className="window-body term-window">
+            <div className="fetch-ascii" aria-hidden="true">
+              {ascii.map((row, i) => (
+                <span key={i} style={{ color: asciiColor[i] }}>
+                  {row}
+                </span>
+              ))}
+            </div>
+            <div className="fetch-info">
+              <div className="term-line" style={{ animationDelay: "100ms" }}>
+                <span className="fetch-host">
+                  {profile.handle}
+                  <span className="at">@</span>
+                  <span className="host">localhost</span>
+                </span>
+              </div>
+              <div className="fetch-rule" aria-hidden="true" />
+              {fastfetch.map((row, i) => (
+                <div className="term-line fetch-row" key={row.k} style={{ animationDelay: `${220 + i * 90}ms` }}>
+                  <span className="fetch-key">{row.k}</span>
+                  <span className="fetch-sep">:</span>
+                  <span className="fetch-val">{row.v}</span>
+                </div>
+              ))}
+              <div className="term-line" style={{ animationDelay: `${220 + fastfetch.length * 90 + 60}ms` }}>
+                <span className="term-cursor" aria-hidden="true" />
               </div>
             </div>
-            <dl className="profile-rows">
-              <div className="profile-row">
-                <dt>Role</dt>
-                <dd>Full-stack · Cloud &amp; DevOps</dd>
-              </div>
-              <div className="profile-row">
-                <dt>Location</dt>
-                <dd>Lahore, Pakistan</dd>
-              </div>
-              <div className="profile-row">
-                <dt>Email</dt>
-                <dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd>
-              </div>
-            </dl>
-            <div className="profile-actions">
-              <a className="profile-action" href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-              <a className="profile-action" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-              <a className="profile-action" href="/resume.pdf" download>Resume ↓</a>
-            </div>
-            <p className="current-tag">
-              Currently: production invoicing portal for European SME back-office
-              teams — <strong>Next.js · FastAPI · PostgreSQL</strong>, owned end to end.
-            </p>
           </div>
-        </div>
+        </WindowFrame>
       </div>
     </section>
   );

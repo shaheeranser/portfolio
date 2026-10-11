@@ -4,18 +4,26 @@ Personal portfolio site for Muhammad Shaheer — a full-stack software engineer.
 
 ## Sections
 
-- **Hero** — intro, availability, profile card and links
-- **Experience** — roles timeline
-- **Projects** — featured projects, open-source contributions, and a strip of recent public repos fetched live from the GitHub API
-- **Stack & credentials** — skills, education, certifications
-- **Contact** — email, phone, LinkedIn, GitHub
+- **Hero** — intro, availability, and a fastfetch-style system-info window
+- **Experience** — roles
+- **Projects** — featured projects, plus shipped and open-source contribution lists
+- **Stack & systems** — skills, education, certifications
+- **Connect** — email, phone, LinkedIn, GitHub, resume
 
 ## Stack
 
 - Next.js 16 (App Router, React 19, Turbopack)
 - TypeScript
 - Tailwind CSS v4
-- `next/font` (Syne, Inter, JetBrains Mono)
+- `next/font` (Inter, JetBrains Mono)
+
+## Design
+
+A riced-desktop theme built on the Catppuccin palettes (Mocha by default, Latte for the light
+theme). The layout uses a GNOME/macOS-style app metaphor — a top panel with clock, tray, theme
+toggle and scroll progress, a floating dock with scroll-spy, an app-grid of projects, and an
+optional spotlight launcher (press `⌘K` / `Ctrl+K` to jump between sections, open links, or
+copy contact details). Dark/light theme persists via `localStorage`.
 
 ## Getting started
 
@@ -26,10 +34,6 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Configuration
-
-- `GITHUB_USERNAME` — GitHub user whose public repos are shown in the "More from GitHub" strip (defaults to `shaheeranser`). Fetched with 12-hour ISR revalidation.
-
 ## Build
 
 ```bash
@@ -39,4 +43,5 @@ npm start
 
 ## Notes
 
-- Featured projects and open-source contributions are curated in `src/components/ProjectGrid.tsx`.
+- Site content (profile, roles, projects, contributions, skills) is curated in `src/lib/content.ts`.
+- The page is fully statically prerendered; no runtime data fetch.
